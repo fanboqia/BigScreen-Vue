@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>大屏</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript">
+			var html = document.querySelector('html');
+			var width = html.clientWidth;
+			html.style.fontSize = width / 30 + "px";
+		</script>
+		<script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/test_db.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+            var $wfi$_pageJsFile={'wsd-stomp': 'scripts/lib/stomp/stomp',
+				                  'wsd-socket': 'scripts/lib/sockjs-client/sockjs.min',
+				                  'whmes-module':'scripts/whmes/whmes-common'
+			                      };
+		</script>
+		<script>
+            var rootArr = location.href.split('/').slice(0,4);
+            var customPath = rootArr[0]+"/"+rootArr[1]+"/"+rootArr[2]+"/"+rootArr[3]+"/"+"scripts/";
+            var localPath = rootArr[0]+"/"+rootArr[1]+"/"+rootArr[2]+"/"+rootArr[3]+"/";
+            document.write("<script src="+customPath+"boot.js?v=3.1 type='text/javascript'><\/script>");
+            document.write("<link rel='icon' type='image/x-icon' href="+"/"+rootArr[3]+"/favicon.png>");
+            //正式服务,测试请注释
+            localPath='http://10.157.3.145:10080/whmes/';
+		</script>
+		<script>
+            //全局维护机台状态颜色代码关系
+            var workCenterColorMap = {};
+            workCenterColorMap['1'] = "green";
+            workCenterColorMap['2'] = "red";
+            workCenterColorMap['3'] = "";
+            workCenterColorMap['4'] = "";
+
+            //包装线颜色
+            var lineColorMap = {};
+            lineColorMap['1'] = "";
+            lineColorMap['2'] = "red";
+            lineColorMap['3'] = "red";
+
+            //成型发射装箱颜色
+			var cxFsZxColorMap = {};
+            cxFsZxColorMap['0'] = "red";
+            cxFsZxColorMap['1'] = "green";
+            cxFsZxColorMap['2'] = "red";
+            cxFsZxColorMap['3'] = "red";
+
+            //柜子状态
+			var cabColorMap = {};
+            cabColorMap['0'] = "signal-white";
+            cabColorMap['1'] = "signal-green";
+		</script>
+        <script type="text/javascript">
+            //全屏
+            function fullScreen(){
+                var el = document.documentElement;
+                var rfs = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+                if(typeof rfs != "undefined" && rfs) {
+                    rfs.call(el);
+                };
+                return;
+            }
+            window.onresize = function() {
+                if (!checkFull()) {
+                    $("#full").show();
+                }else{
+                    $("#full").hide();
+				}
+            }
+            function checkFull() {
+                return document.fullscreenElement    ||
+                    document.msFullscreenElement  ||
+                    document.mozFullScreenElement ||
+                    document.webkitFullscreenElement || false;
+            }
+            //退出，刷新时取消订阅
+            var subId = [];
+            unsubscribe = function(){
+                if(top.WsdStompClient){
+                    for(var i = 0;i < subId.length; i++){
+                        subId[i].unsubscribe(subId[i].id);
+                    }
+                }
+            }
+        </script>
+        <button id="full" onclick="fullScreen()" style="background-color: black; position:absolute; z-index:100;"><span style="color:white;">点击全屏</span></button>
+		<link rel="stylesheet" type="text/css" href="css/newStyle.css" />
+        <style>
+            /*动画默认关闭*/
+            .gif-init{
+                display: none;
+            }
+        </style>
+	</head>
+	<body onunload="unsubscribe()">
+		<h4 class="screenTitle" style="width: 100%;height: 0.6rem;line-height: 0.6rem;font-size: 0.4rem;text-align: center;position: absolute;left: 0;top: 0;background: url(img/header.png) 0 0 no-repeat;background-size: 100% 100%;"></h4>
+		<div class="BigScreen">
+			<div class="BigScreen-left fl">
+				<!--仓库-->
+				<div class="borderBox Stock fr">
+					<span class="horn1"></span>
+					<span class="horn2"></span>
+					<span class="horn3"></span>
+					<span class="horn4"></span>
+					<div id="flDto" class="StockItem">
+						<h4 class="title">辅料库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico1.png" class="img1">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">占用比</p>
+								<h4 class="data ratio">0%</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data packNum">0</h4>
+								<p class="name">总容量</p>
+								<h4 class="data capacity">0</h4>
+							</div>
+						</div>
+					</div>
+					<div id="sxDto" class="StockItem">
+						<h4 class="title">丝箱库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico2.png" class="img2">
+								<p>占用比 <span class="ratio">61%</span></p>
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data kilo">0</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data packNum">0</h4>
+								<p class="name">总容量</p>
+								<h4 class="data capacity">0</h4>
+							</div>
+						</div>
+					</div>
+					<div id="cpDto" class="StockItem">
+						<h4 class="title">成品库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico3.png" class="img3">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">占用比</p>
+								<h4 class="data ratio">0%</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data packNum">0</h4>
+								<p class="name">总容量</p>
+								<h4 class="data capacity">0</h4>
+							</div>
+						</div>
+					</div>
+					<div id="lbDto" class="StockItem">
+						<h4 class="title">滤棒库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico4.png" class="img4">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">占用比</p>
+								<h4 class="data ratio">0%</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data packNum">0</h4>
+								<p class="name">总容量</p>
+								<h4 class="data capacity">0</h4>
+							</div>
+						</div>
+					</div>
+					<div id="pfDto" class="StockItem">
+						<h4 class="title">配方库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico5.png" class="img5">
+								<p style="margin-top: 0.11363636rem;">占用比 <span class="ratio">61%</span></p>
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data kilo">0</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data packNum">0</h4>
+								<p class="name">总容量</p>
+								<h4 class="data capacity">0</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--生产线-->
+				<div class="Production-line fr">
+					<p class="Production-line-name" style="top:0.8rem;">梗丝线</p>
+					<p class="Production-line-name" style="top:2.9rem;">制丝一号线</p>
+					<p class="Production-line-name" style="top:5.4rem;">制丝二号线</p>
+					<p class="Production-line-name" style="top:7.5rem;">制丝三号线</p>
+					<p class="Production-line-name" style="top:9.4rem;">制丝四号线</p>
+					<p class="Production-line-name" style="top:11.3rem;">制丝五号线</p>
+					<div id="17112" class="stem-silk silk1">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai abnormal"></span>
+							一级储梗
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div id="17113" class="stem-silk silk2">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai abnormal"></span>
+							二级储梗
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div id="17114" class="stem-silk silk3">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai abnormal"></span>
+							储梗丝柜
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div id="11101" class="stem-silk silk4">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div id="11102" class="stem-silk silk5">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div id="12101" class="stem-silk silk6">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01051 </p>
+					</div>
+					<div id="12102" class="stem-silk silk7">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01051 </p>
+					</div>
+					<div id="1112103" class="stem-silk silk8">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01052 </p>
+					</div>
+					<div id="13101" class="stem-silk silk9">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div id="13102" class="stem-silk silk10">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div id="13103" class="stem-silk silk11">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div id="14104" class="stem-silk silk12">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							润叶
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="14105" class="stem-silk silk13">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							加料
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="14102" class="stem-silk silk14">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="15104" class="stem-silk silk15">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							润叶
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="15105" class="stem-silk silk16">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							加料
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="15102" class="stem-silk silk17">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div id="1415103" class="stem-silk silk18">
+						<h4 class="title">
+							<span class="tai abnormal"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+
+
+
+
+					<!--储梗柜-->
+					<div class="Cabinet-10" id="gsGroup1">
+						<div cid="GS7601" class="CabinetItem white">1</div>
+						<div cid="GS7602" class="CabinetItem white">2</div>
+						<div cid="GS7603" class="CabinetItem white">3</div>
+						<div cid="GS7604" class="CabinetItem white">4</div>
+						<div cid="GS7605" class="CabinetItem white">5</div>
+						<div cid="GS7606" class="CabinetItem white">6</div>
+						<div cid="GS7607" class="CabinetItem white">7</div>
+						<div cid="GS7608" class="CabinetItem white">8</div>
+						<div cid="GS7609" class="CabinetItem white">9</div>
+						<div cid="GS7610" class="CabinetItem white">10</div>
+					</div>
+                    <!--------------------------------------------------------------->
+
+
+					<!--生产线储柜区域-->
+					<div class="random-two"></div>
+					<div class="random-tjree"></div>
+					<div class="random-four"></div>
+					<div class="change location-one"></div>
+					<div class="change location-two"></div>
+					<div class="change location-three"></div>
+					<div class="change location-four"></div>
+					<div class="change location-five"></div>
+                    <!--切片101，切丝102，加香103, 润叶104, 加料105-->
+					<div class="image1">
+						<img src="img/backage-one.gif" alt="" class="backage-one 17112 gif-init"/>
+						<div class="17113 gif-init">
+							<img src="img/img1-2.png" alt="" class="img1-2"/>
+							<img src="img/img1-3.png" alt="" class="img1-3"/>
+						</div>
+						<div class="17114 gif-init">
+							<img src="img/img1-4.png" alt="" class="img1-4"/>
+							<img src="img/img1-5.png" alt="" class="img1-5"/>
+						</div>
+					</div>
+					<div class="image2">
+						<img src="img/backage-two.gif" alt="" class="backage-two 11101 gif-init"/>
+						<img src="img/img2-2.png" alt="" class="img2-2 11102 gif-init"/>
+                        <img src="img/img2-3.png" alt="" class="img2-3 11102 gif-init"/>
+                        <!--这一块的产线流动通过加香段控制-->
+						<img src="img/img2-4.png" alt="" class="img2-4 1112103 gif-init"/>
+						<img src="img/img2-5.png" alt="" class="img2-5 1112103 gif-init"/>
+					</div>
+					<div class="image3">
+						<img src="img/backage-two.gif" alt="" class="backage-three 12101 gif-init"/>
+						<div class="12102 gif-init">
+							<img src="img/img2-2.png" alt="" class="img2-2"/>
+							<img src="img/img2-3.png" alt="" class="img2-3"/>
+						</div>
+						<img src="img/img2-4.png" alt="" class="img2-4 1112103 gif-init"/>
+						<img src="img/img2-5.png" alt="" class="img2-5 1112103 gif-init"/>
+					</div>
+					<div class="image4">
+						<img src="img/backage-two.gif" alt="" class="backage-four 13101 gif-init"/>
+						<img src="img/img2-2.png" alt="" class="img2-2 13102 gif-init"/>
+						<img src="img/img2-3.png" alt="" class="img2-3 13102 gif-init"/>
+						<img src="img/img2-4.png" alt="" class="img2-4 13103 gif-init"/>
+						<img src="img/img2-5.png" alt="" class="img2-5 13103 gif-init"/>
+					</div>
+					<div class="image5">
+						<img src="img/backage-two.gif" alt="" class="backage-five 14104 gif-init"/>
+						<div class="14105 gif-init">
+							<img src="img/img5-2.png" alt="" class="img5-2"/>
+							<img src="img/img5-3.png" alt="" class="img5-3"/>
+						</div>
+						<div class="14102 gif-init">
+							<img src="img/img5-4.png" alt="" class="img5-4"/>
+							<img src="img/img5-5.png" alt="" class="img5-5"/>
+						</div>
+						<img src="img/img5-6.png" alt="" class="img5-6 1415103 gif-init"/>
+					</div>
+					<div class="image6">
+						<img src="img/backage-two.gif" alt="" class="backage-six 15104 gif-init"/>
+						<div class="15105 gif-init">
+							<img src="img/img5-2.png" alt="" class="img5-2"/>
+							<img src="img/img5-3.png" alt="" class="img5-3"/>
+						</div>
+						<div class="15102 gif-init">
+							<img src="img/img5-4.png" alt="" class="img5-4"/>
+							<img src="img/img5-5.png" alt="" class="img5-5"/>
+						</div>
+						<img src="img/img6-6.png" alt="" class="img6-6 1415103 gif-init"/>
+					</div>
+
+
+
+
+                    <!--梗丝线储柜-->
+					<div class="signal-one">
+						<span sid="GZ7601" class="signal signal-first signal-white"></span>
+						<span sid="GZ7602" class="signal signal-second signal-white"></span>
+						<span sid="GZ7603" class="signal signal-third signal-white"></span>
+						<span sid="GZ7604" class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-two">
+						<span sid="GZ7605" class="signal signal-first signal-white"></span>
+						<span sid="GZ7606" class="signal signal-second signal-white"></span>
+						<span sid="GZ7607" class="signal signal-third signal-white"></span>
+						<span sid="GZ7608" class="signal signal-fourth signal-white"></span>
+					</div>
+                    <!--一号线-->
+					<div class="signal-three">
+						<span sid="CY1601" class="signal signal-first signal-white"></span>
+						<span sid="CY1602" class="signal signal-second signal-white"></span>
+						<span sid="CY1603" class="signal signal-third signal-white"></span>
+						<span sid="CY1604" class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-four">
+						<span sid="HG1801" class="signal signal-first signal-white"></span>
+						<span sid="HG1802" class="signal signal-second signal-white"></span>
+					</div>
+                    <!--二号线-->
+					<div class="signal-five">
+						<span sid="CY2605" class="signal signal-first signal-white"></span>
+						<span sid="CY2606" class="signal signal-second signal-white"></span>
+						<span sid="CY2607" class="signal signal-third signal-white"></span>
+						<span sid="CY2608" class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-six">
+						<span sid="HG2803" class="signal signal-first signal-white"></span>
+						<span sid="HG2804" class="signal signal-second signal-white"></span>
+					</div>
+                    <!--三号线-->
+					<div class="signal-seven">
+						<span sid="CY3609" class="signal signal-first signal-white"></span>
+						<span sid="CY3610" class="signal signal-second signal-white"></span>
+						<span sid="CY3611" class="signal signal-third signal-white"></span>
+						<span sid="CY3612" class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-eight">
+						<span sid="HG3805" class="signal signal-first signal-white"></span>
+						<span sid="HG3806" class="signal signal-second signal-white"></span>
+					</div>
+                    <!--四号线润叶-->
+					<div class="signal-nine">
+						<span sid="YH4601" class="signal signal-first signal-white"></span>
+						<span sid="YH4602" class="signal signal-second signal-white"></span>
+					</div>
+                    <!--四号线加料-->
+					<div class="signal-ten">
+						<span sid="CY4613" class="signal signal-first signal-white"></span>
+						<span sid="CY4614" class="signal signal-second signal-white"></span>
+						<span sid="CY4615" class="signal signal-third signal-white"></span>
+						<span sid="CY4616" class="signal signal-fourth signal-white"></span>
+						<span sid="CY4617" class="signal signal-fifth signal-white"></span>
+						<span sid="CY4618" class="signal signal-sixth signal-white"></span>
+					</div>
+                    <!--五号线润叶-->
+					<div class="signal-eleven">
+						<span sid="YH5603" class="signal signal-first signal-white"></span>
+						<span sid="YH5604" class="signal signal-second signal-white"></span>
+					</div>
+                    <!--4,5号线混丝-->
+					<div class="signal-twelve">
+						<span sid="HG4807" class="signal signal-first signal-white"></span>
+						<span sid="HG4808" class="signal signal-second signal-white"></span>
+						<span sid="HG4809" class="signal signal-third signal-white"></span>
+						<span sid="HG4810" class="signal signal-fourth signal-white"></span>
+					</div>
+                    <!--五号线加料-->
+					<div class="signal-thirteen">
+						<span sid="CY5619" class="signal signal-first signal-white"></span>
+						<span sid="CY5620" class="signal signal-second signal-white"></span>
+						<span sid="CY5621" class="signal signal-third signal-white"></span>
+						<span sid="CY5622" class="signal signal-fourth signal-white"></span>
+						<span sid="CY5623" class="signal signal-fifth signal-white"></span>
+						<span sid="CY5624" class="signal signal-sixth signal-white"></span>
+					</div>
+
+
+
+
+
+					<!--储梗柜-->
+					<div class="Cabinet-13" id="gsGroup2">
+						<div cid="GS7611" class="CabinetItem white">11</div>
+						<div cid="GS7612" class="CabinetItem white">12</div>
+						<div cid="GS7613" class="CabinetItem white">13</div>
+					</div>
+					<div class="Cabinet-16" id="gsGroup3">
+						<div cid="GS7614" class="CabinetItem white">14</div>
+						<div cid="GS7615" class="CabinetItem white">15</div>
+						<div cid="GS7616" class="CabinetItem white">16</div>
+					</div>
+					<!--储叶柜-->
+					<div id="cyGroup3" class="Cabinet-27">
+						<div cid="CS1825" class="CabinetItem white">25</div>
+						<div cid="CS1826" class="CabinetItem white">26</div>
+						<div cid="CS1827" class="CabinetItem white">27</div>
+					</div>
+					<div id="cyGroup1" class="Cabinet-18">
+						<div class="line">
+							<div cid="CS1801" class="CabinetItem white">1</div>
+							<div cid="CS1802" class="CabinetItem white">2</div>
+							<div cid="CS1803" class="CabinetItem white">3</div>
+						</div>
+						<div class="line">
+							<div cid="CS1804" class="CabinetItem white">4</div>
+							<div cid="CS1805" class="CabinetItem white">5</div>
+							<div cid="CS1806" class="CabinetItem white">6</div>
+						</div>
+						<div class="line">
+							<div cid="CS1807" class="CabinetItem white">7</div>
+							<div cid="CS1808" class="CabinetItem white">8</div>
+							<div cid="CS1809" class="CabinetItem white">9</div>
+						</div>
+						<div class="line">
+							<div cid="CS1810" class="CabinetItem white">10</div>
+							<div cid="CS1811" class="CabinetItem white">11</div>
+							<div cid="CS1812" class="CabinetItem white">12</div>
+						</div>
+						<div class="line">
+							<div cid="CS1813" class="CabinetItem white">13</div>
+							<div cid="CS1814" class="CabinetItem white">14</div>
+							<div cid="CS1815" class="CabinetItem white">15</div>
+						</div>
+						<div class="line">
+							<div cid="CS1816" class="CabinetItem white">16</div>
+							<div cid="CS1817" class="CabinetItem white">17</div>
+							<div cid="CS1818" class="CabinetItem white">18</div>
+						</div>
+					</div>
+					<div id="cyGroup2" class="Cabinet-24">
+						<div class="line">
+							<div cid="CS1819" class="CabinetItem white">19</div>
+							<div cid="CS1820" class="CabinetItem white">20</div>
+							<div cid="CS1821" class="CabinetItem white">21</div>
+						</div>
+						<div class="line">
+							<div cid="CS1822" class="CabinetItem white">22</div>
+							<div cid="CS1823" class="CabinetItem white">23</div>
+							<div cid="CS1824" class="CabinetItem white">24</div>
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+			<!--echarts-->
+			<div class="BigScreen-center borderBox fl">
+				<span class="horn1"></span>
+				<span class="horn2"></span>
+				<span class="horn3"></span>
+				<span class="horn4"></span>
+				<div class="chartwarp chart1">
+					<h4>当日生产制丝工单信息</h4>
+					<div id="chart1" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart2">
+					<h4>卷包日进度</h4>
+					<h6 style="position:absolute;top:40%;right:14%;z-index:99;font-size:0.2rem;font-weight: bold;">硬包</h6>
+					<h6 style="position:absolute;top:40%;left:14%;z-index:99;font-size:0.2rem;font-weight: bold;">软包</h6>
+					<div id="chart2" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart3">
+					<h4>设备效率</h4>
+					<div id="chart3" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart4">
+					<h4>实际产量</h4>
+					<div id="chart4" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart5">
+					<h4>近六月计划完成情况</h4>
+					<div id="chart5" style="width: 100%;height: 100%;"></div>
+				</div>
+			</div>
+
+			<!--辅料库-->
+			<div class="BigScreen-right fl">
+				<div class="Machine-top">
+					<ul id="flRow1" class="listWarp1">
+
+					</ul>
+					<ul id="flRow2" class="listWarp1 listWarp2">
+						
+					</ul>
+					<ul id="flRow3" class="listWarp3">
+						
+					</ul>
+				</div>
+
+                <!--机台-->
+                <div class="Machine-bottom">
+                    <div id="workCenterPos100" class="MachineList fl">
+
+                    </div>
+
+                    <div id="workCenterPos200" class="MachineList MachineList8 fl">
+
+                    </div>
+
+                    <div id="workCenterPos300" class="MachineList MachineList2 fl">
+
+                    </div>
+
+                    <div id="workCenterPos400" class="MachineList MachineList3 fl">
+
+                    </div>
+                </div>
+            </div>
+		</div>
+
+			<!--机台模版-->
+			<script id="workCenterTmpl" type="text/x-jquery-tmpl">
+				{{each(i,item) workCenters}}
+		            <div id="{{= item.id}}" class="item">
+                        <div class="imgCon clearfix">
+                            <div class="img-left fl"></div>
+                            <span class="left-num"></span>
+                            <div class="img-right fl"></div>
+                            <span class="right-num"></span>
+                        </div>
+                        <h4 class="name">
+                            <p class="warp"><span class="animate"></span></p>
+                        </h4>
+                        <h4 class="name2">
+                            <p class="warp">
+                            <span class="animate"></span>
+                            </p>
+                        </h4>
+                        <div class="line red"></div>
+                        <div class="code">{{= item.name}}</div>
+                    </div>
+				{{/each}}
+        	</script>
+
+			<!--辅料库模版-->
+			<script id="flBaseTmpl" type="text/x-jquery-tmpl">
+				{{each(i,item) flBases}}
+					<li id="{{= item.workCenterCode}}">
+						<span>${i+1}</span>
+					</li>
+				{{/each}}
+			</script>
+
+            <!--字体滚动动画-->
+            <script type="text/javascript">
+                var timeExecuteMap = {};
+                function autoScrollNew() {
+                    againInit();
+                    autoScroll(".Machine-bottom  .name");
+                    autoScroll(".Machine-bottom  .name2");
+
+                    function againInit() {
+
+                        for (var key in timeExecuteMap) {
+                            clearInterval(key);
+                        }
+
+                        timeExecuteMap = {};
+
+                        var length = $(".Machine-bottom .warp").length;
+                        var warps = $(".Machine-bottom .warp");
+                        for (var i = 0; i < length; i++) {
+                            var firstChild = $(warps[i].firstElementChild);
+                            firstChild.parent().width(firstChild.parent().parent().width());
+                            firstChild.siblings().remove();
+                        }
+                    }
+                    function autoScroll(el) {
+                        $(el).each(function(i) {
+                            var _this = $(this);
+                            if (_this.find(".animate").width() > _this.width() && _this.find(".warp").find(".animate").length < 2) {
+                                var warp = _this.find(".warp");
+                                var scrollItem = warp.find(".animate").innerWidth();
+                                var clone = warp.find(".animate").clone();
+                                warp.append(clone);
+                                warp.width(scrollItem * warp.find(".animate").length);
+
+
+                                var myscroll = setInterval(function() {
+                                    scrollAnimate();
+                                }, 50);
+
+                                timeExecuteMap[myscroll] = myscroll;
+
+                                var left = _this.scrollLeft();
+
+                                function scrollAnimate() {
+                                    if (_this.scrollLeft() >= scrollItem) {
+                                        left = 0;
+                                        _this.scrollLeft(0)
+                                    } else {
+                                        _this.scrollLeft(left++);
+                                    }
+                                }
+
+                                //鼠标移入清除滚动
+                                // _this.mouseover(function() {
+                                // 	clearInterval(myscroll);
+                                // 	delete timeExecuteMap[myscroll];
+                                // })
+                                // //鼠标移出滚动继续
+                                // _this.mouseout(function() {
+                                // 	myscroll = setInterval(function() {
+                                // 		scrollAnimate()
+                                // 	}, 50)
+                                // 	timeExecuteMap[myscroll] = myscroll;
+                                // })
+                            }
+                        });
+                    }
+                }
+			</script>
+
+			<script type="text/javascript">
+				function CustomPageFunction() {
+                    //测试数据,初始化数据
+                    loadData(test_dt);
+
+                    //总体数据加载
+                    function loadData(test_dt) {
+                        //加载echarts
+                        loadChartOne(test_dt.planBatchDto);
+                        loadChartTwo(test_dt.workCenterStatusDto);
+                        loadChartThree(test_dt.equEfficiencyDto);
+                        loadChartFour(test_dt.realProductAmountDto);
+                        loadChartFive(test_dt.yearPlanDto);
+                        //加载机台
+                        loadWorkCenters(test_dt.workCenterGroupDto);
+                        //加载辅料库数据
+                        loadFlBase(test_dt.flBaseGroupDto.flBaseDtos);
+                        //加载生产线
+                        initLines();
+                        //加载5个库
+                        loadInvs(test_dt.invDto);
+
+                        autoScrollNew();
+                    }
+
+                    //初始化生产线
+                    function initLines(){
+                        var silks = $(".Production-line").children(".stem-silk");
+                        //修改状态
+                        silks.find("span").attr("class", "tai abnormal");
+                        //修改名称
+                        silks.find("p").html("");
+                    }
+
+                    //加载5个库
+                    function loadInvs(data) {
+                        for(var dto in data){
+                            $("#"+dto+" .ratio").html(data[dto].ratio+"%");
+                            $("#"+dto+" .kilo").html(data[dto].kilo);
+                            $("#"+dto+" .packNum").html(data[dto].packNum);
+                            $("#"+dto+" .capacity").html(data[dto].capacity);
+						}
+                    }
+
+                    //加载生产线
+                    function loadLines(data) {
+                        //根据线编号改值
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status == 1) {
+                                $("#"+data[i].linePro + " span").attr("class", "tai");
+                                //关闭相关生产线动态图
+                                $("."+data[i].linePro).show();
+                            }
+                            if (data[i].status == 0) {
+                                $("#"+data[i].linePro + " span").attr("class", "tai abnormal");
+                                //打开相关生产线动态图
+                                $("."+data[i].linePro).hide();
+                            }
+                            $("#"+data[i].linePro + " p").eq(0).html(data[i].matName);
+                            $("#"+data[i].linePro + " p").eq(1).html(data[i].batch);
+                        }
+                    }
+
+                    //加载所有柜子状态
+                    //cid对应的是生产线之外标号的柜子
+                    //id对应的是生产线上的柜子
+                    function loadCY(data) {
+                        for(var key in data){
+                            //修改标号柜子状态
+                            var ccab = $("[cid='"+key+"']");
+                            if(ccab.length > 0){
+                                if(data[key] == 0){
+                                    ccab.attr("class","CabinetItem white");
+                                }else{
+                                    ccab.attr("class","CabinetItem");
+                                }
+                            }
+                            //修改生产线信号柜子状态颜色
+							var cab = $("[sid='"+key+"']");
+                            if(cab.length > 0){
+                                var oldClass = cab.attr("class");
+                                var newClass = oldClass.split(" ").slice(0,2).join(" ") +" "+cabColorMap[data[key]];
+                                cab.attr("class",newClass);
+                            }
+						}
+                    }
+
+                    //初始化加载辅料库数据
+                    function loadFlBase(data) {
+                        //排序String
+						data.sort(function(a,b){
+						    if(a.workCenterCode != undefined && b.workCenterCode != undefined){
+                                return a.workCenterCode.localeCompare(b.workCenterCode);
+							}else{
+						        return 1;
+							}
+						});
+                        var obj = {};
+                        //画第一行
+                        obj.flBases = data.slice(0, 15);
+                        $("#flRow1").empty();
+                        $("#flBaseTmpl").tmpl(obj).appendTo("#flRow1");
+                        //画第二行
+                        obj.flBases = data.slice(15, 15 + 13);
+                        $("#flRow2").empty();
+                        $("#flBaseTmpl").tmpl(obj).appendTo("#flRow2");
+                        //画第三行
+                        obj.flBases = data.slice(15 + 13, 15 + 13 + 18);
+                        $("#flRow3").empty();
+                        $("#flBaseTmpl").tmpl(obj).appendTo("#flRow3");
+                    }
+
+                    //加载辅料库数据
+                    function loadFlBaseNew(data) {
+                        for(var i = 0; i < data.length; i++){
+                            var id = data[i].workCenterCode;
+                            var status = data[i].status;
+                            //颜色控制
+							if(cxFsZxColorMap[status] != undefined && cxFsZxColorMap[status] != ""){
+                                $("#"+id).attr("class", cxFsZxColorMap[status]);
+							}
+						}
+                    }
+
+                    //加载机台
+                    function loadWorkCenters(data) {
+                        var obj = {};
+                        //画第一列
+                        obj.workCenters = data.slice(0, 13);
+                        $("#workCenterPos100").empty();
+                        $("#workCenterTmpl").tmpl(obj).appendTo("#workCenterPos100");
+                        //画第二列
+                        obj.workCenters = data.slice(13, 13 + 13);
+                        $("#workCenterPos200").empty();
+                        $("#workCenterTmpl").tmpl(obj).appendTo("#workCenterPos200");
+                        //画第三列
+                        obj.workCenters = data.slice(13 + 13, 13 + 13 + 14);
+                        $("#workCenterPos300").empty();
+                        $("#workCenterTmpl").tmpl(obj).appendTo("#workCenterPos300");
+                        //画第四列
+                        obj.workCenters = data.slice(13 + 13 + 14, 13 + 13 + 14 + 4);
+                        $("#workCenterPos400").empty();
+                        $("#workCenterTmpl").tmpl(obj).appendTo("#workCenterPos400");
+                    }
+
+                    //加载机台新
+                    function loadWorkCentersNew(data){
+                        for(var i = 0; i < data.length; i++){
+                            if(data[i].jjDto != undefined){
+                                var id = data[i].jjDto.workCenterCode.substring(3,6);
+                                var item = $("#"+id);
+                                item.find(".left-num").html(data[i].jjDto.boxNum);
+                                item.find(".name").find(".animate").html(data[i].jjDto.matName);
+                                var workCenterColor = workCenterColorMap[data[i].jjDto.status];
+                                item.find(".img-left").attr("class","img-left "+workCenterColor+" fl");
+                            }
+                            if(data[i].bzDto != undefined){
+                                var id = data[i].bzDto.workCenterCode.substring(3,6);
+                                var item = $("#"+id);
+                                item.find(".right-num").html(data[i].bzDto.boxNum);
+                                if(data[i].jjDto == undefined || data[i].bzDto.matName != data[i].jjDto.matName){
+                                    item.find(".name2").find(".animate").html(data[i].bzDto.matName);
+                                }else{
+                                    item.find(".name2").find(".animate").html("");
+                                }
+                                var workCenterColor = workCenterColorMap[data[i].bzDto.status];
+                                item.find(".img-right").attr("class","img-right "+workCenterColor+" fl");
+                                var lineColor = lineColorMap[data[i].bzDto.status];
+                                item.find(".line").attr("class","line "+lineColor);
+                            }
+                        }
+                    }
+
+                    //加载第一个echart,最上面那个
+                    function loadChartOne(lineData) {
+                        function remToPx(rem) {
+                            var fontSize = document.documentElement.style.fontSize;
+                            return Math.floor(rem * fontSize.replace('px', ''));
+                        }
+
+                        var worldMapContainer = document.getElementById('chart1');
+
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(worldMapContainer, null, {'renderer':'svg'});
+
+                        option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                data: ['已完成', '未完成'],
+                                right: '5%',
+                                top: "5%",
+                                itemWidth: remToPx(0.16608392),
+                                itemHeight: remToPx(0.08741259),
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize: remToPx(0.15734266)
+                                }
+                            },
+                            color: ['#51d951', '#54bbe8'],
+                            grid: {
+                                left: '2%',
+                                top: "20%",
+                                bottom: '5%',
+                                containLabel: true
+                            },
+                            xAxis: {
+                                type: 'value',
+                                axisLabel: {
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1486014)
+                                    }
+                                },
+                                axisLine: {
+                                    show: false,
+                                    lineStyle: {
+                                        color: '#eeeeee'
+                                    }
+                                },
+                            },
+                            yAxis: {
+                                type: 'category',
+                                data: ['5号线', '4号线', '3号线', '2号线', '1号线'],
+                                axisLabel: {
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1486014)
+                                    }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#eeeeee'
+                                    }
+                                },
+                                axisTick: {
+                                    show: false
+                                }
+                            },
+                            series: [{
+                                name: '已完成',
+                                type: 'bar',
+                                stack: '总量',
+                                barWidth: remToPx(0.16608392),
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'insideRight',
+                                        fontSize: remToPx(0.11363636)
+                                    }
+                                },
+                                data: lineData.finishNum || []
+                            },
+                                {
+                                    name: '未完成',
+                                    type: 'bar',
+                                    stack: '总量',
+                                    barWidth: remToPx(0.16608392),
+                                    label: {
+                                        normal: {
+                                            show: true,
+                                            position: 'insideRight',
+                                            fontSize: remToPx(0.11363636)
+                                        }
+                                    },
+                                    data: lineData.unfinishNum || []
+                                },
+
+                            ]
+
+                        }
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+
+                        //浏览器大小改变时重置大小
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+                    };
+
+                    //加载第二个echart
+                    function loadChartTwo(data) {
+                        function remToPx(rem) {
+                            var fontSize = document.documentElement.style.fontSize;
+                            return Math.floor(rem * fontSize.replace('px', ''));
+                        }
+
+                        var worldMapContainer = document.getElementById('chart2');
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(worldMapContainer, null, {'renderer':'svg'});
+
+                        var rel = html.clientWidth/30;
+                        var option = {
+                            tooltip : {
+                                formatter: "{a} <br/>{c} {b}"
+                            },
+                            series :
+                                [
+                                    {
+                                        name: '卷包日进度',
+                                        type: 'gauge',
+                                        radius:'60%',
+                                        center:['50%','50%'],
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: [[0.2, '#228b22'],[0.8, '#48b'],[1, '#ff4500']],
+                                                width: remToPx(7/64),  //仪表盘外围宽度    //1920 -> 7
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length : remToPx(7/64),		   //分割线长     //1920 -> 7
+                                        },
+                                        axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: 'auto',
+                                                //所有文字大小
+                                                fontSize : remToPx(9/64) //1920 -> 9
+                                            }
+                                        },
+                                        detail: {formatter:'{value}%',fontSize:remToPx(20/64),offsetCenter: [0, '90%']},       // 1920 -> 20
+                                        pointer : {
+                                            width : remToPx(5/64) //指针宽度  // 1920 -> 5
+                                        },
+                                        title : {
+                                            show : true,
+                                            offsetCenter: [0, '-30%'],       // 完成率偏移
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                //改标题字大小
+                                                fontSize: remToPx(13/64), //完成率字体大小           //1920 -> 13
+												color : 'white'
+                                            }
+                                        },
+                                        data: [{value: data.jbRate || 0, name: '完成率'}]
+                                    },
+                                    {
+                                        name: '软包',
+                                        type: 'gauge',
+                                        center:['19%','75%'],
+                                        radius:'40%',
+										// axisTick :{
+                                         //    lineStyle: {
+                                         //        length : 3
+										// 	}
+										// },
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: [[0.2, '#228b22'],[0.8, '#48b'],[1, '#ff4500']],
+                                                width: remToPx(8/64),  //仪表盘外围宽度
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length : remToPx(4/64),		   //分割线长
+                                            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                                color: 'auto'
+                                            }
+                                        },
+                                        axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: 'auto',
+                                                //所有文字大小
+                                                fontSize : remToPx(5/64)
+                                            }
+                                        },
+                                        //改显示值
+                                        detail: {formatter:'{value}%',fontSize:remToPx(13/64),offsetCenter: [0, '90%']},
+                                        pointer : {
+                                            width : remToPx(3/64)
+                                        },
+                                        title : {
+                                            show : true,
+                                            offsetCenter: [0, '-30%'],       // 完成率偏移
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                //改标题字大小
+                                                fontSize: remToPx(9/64), //完成率字体大小
+                                                color : 'white'
+                                            }
+                                        },
+                                        data: [{value: data.rbRate || 0, name: '完成率'}]
+                                    },
+                                    {
+                                        name: '硬包',
+                                        type: 'gauge',
+                                        center:['81%','75%'],
+                                        radius:'40%',
+                                        // axisTick :{
+                                        //    lineStyle: {
+                                        //        length : 3
+                                        // 	}
+                                        // },
+                                        axisLine: {            // 坐标轴线
+                                            lineStyle: {       // 属性lineStyle控制线条样式
+                                                color: [[0.2, '#228b22'],[0.8, '#48b'],[1, '#ff4500']],
+                                                width: remToPx(8/64),  //仪表盘外围宽度
+                                            }
+                                        },
+                                        splitLine: {           // 分隔线
+                                            length : remToPx(4/64),		   //分割线长
+                                        },
+                                        axisLabel: {           // 坐标轴文本标签，详见axis.axisLabel
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                color: 'auto',
+                                                //所有文字大小
+                                                fontSize : remToPx(5/64)
+                                            }
+                                        },
+                                        //改显示值
+                                        detail: {formatter:'{value}%',fontSize:'13',offsetCenter: [0, '90%']},
+                                        pointer : {
+                                            width : remToPx(3/64)
+                                        },
+                                        title : {
+                                            show : true,
+                                            offsetCenter: [0, '-30%'],       // 完成率偏移
+                                            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                                fontWeight: 'bolder',
+                                                //改标题字大小
+                                                fontSize: remToPx(9/64), //完成率字体大小
+                                                color : 'white'
+                                            }
+                                        },
+                                        data: [{value: data.ybRate || 0, name: '完成率'}]
+                                    }
+                                ]
+                        };
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+
+                        //浏览器大小改变时重置大小
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+                    };
+
+                    function loadChartThree(data) {
+                        function remToPx(rem) {
+                            var fontSize = document.documentElement.style.fontSize;
+                            return Math.floor(rem * fontSize.replace('px', ''));
+                        }
+
+                        var worldMapContainer = document.getElementById('chart3');
+
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(worldMapContainer, null, {'renderer':'svg'});
+
+                        option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                data: ['去年', '今年'],
+                                right: '5%',
+                                top: "5%",
+                                itemWidth: remToPx(0.16608392),
+                                itemHeight: remToPx(0.08741259),
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize: remToPx(0.15734266),
+                                }
+                            },
+                            grid: {
+                                left: '2%',
+                                top: "20%",
+                                bottom: '6%',
+                                containLabel: true
+                            },
+                            calculable: true,
+                            xAxis: [{
+                                type: 'category',
+                                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+
+                                axisLabel: {
+                                    interval: 0,
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1048951),
+                                    }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                }
+                            }],
+                            yAxis: [{
+                                type: 'value',
+                                max: 100,
+                                splitLine: {
+                                    show: true
+                                },
+                                nameTextStyle: {
+                                    color: ['#ffffff']
+                                },
+                                axisLabel: {
+                                    formatter: '{value}%',
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1048951),
+                                    }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                }
+                            },],
+
+
+                            series: [
+
+                                {
+                                    name: '去年',
+                                    type: 'bar',
+                                    barWidth: remToPx(0.05681818),
+                                    data: data.lastYearEff || [],
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#55bbea'
+                                        }
+                                    }
+                                },
+                                {
+                                    name: '今年',
+                                    type: 'bar',
+                                    barWidth: remToPx(0.05681818),
+                                    data: data.thisYearEff || [],
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#5cb85c'
+                                        }
+                                    }
+                                },
+                            ]
+                        }
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+
+                        //浏览器大小改变时重置大小
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+                    };
+
+                    function loadChartFour(data) {
+                        function remToPx(rem) {
+                            var fontSize = document.documentElement.style.fontSize;
+                            return Math.floor(rem * fontSize.replace('px', ''));
+                        }
+
+                        var worldMapContainer = document.getElementById('chart4');
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(worldMapContainer, null, {'renderer':'svg'});
+
+                        //填充数据
+						var obj = data.catCigs;
+						var arrs = [];
+						var keys = [];
+						for(var ele in obj){
+                            var keyPair = {};
+                            keyPair.name = ele;
+                            keyPair.value = obj[ele];
+                            arrs.push(keyPair);
+                            keys.push(ele);
+						}
+
+						//reverse
+						for(var i = 0 ; i < keys.length/2; i++){
+						    var tmp = keys[i];
+						    keys[i] = keys[keys.length-i-1];
+                            keys[keys.length-i-1] = tmp;
+						}
+
+                        option = {
+                            tooltip: {
+                                trigger: 'item',
+                                formatter: "{a} <br/>{b}: {c} ({d}%)"
+                            },
+                            color: ['#53b1e5', '#e44952', '#4fcc5b', '#d6c131'],
+                            legend: {
+                                orient: 'vertical',
+                                right: '10%',
+                                top: "28%",
+                                itemWidth: remToPx(0.16608392),
+                                itemHeight: remToPx(0.08741259),
+                                itemGap: remToPx(0.26223776),
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize: remToPx(0.15734266),
+                                },
+                                data: keys.length > 0 ? keys : ['一类烟','二类烟','无价烟']
+                            },
+                            series: [{
+                                name: '实际产量(占比)',
+                                type: 'pie',
+                                radius: '60%',
+                                center: ['35%', '60%'],
+                                avoidLabelOverlap: false,
+                                label: {
+                                    normal: {
+                                        show: true,
+                                        position: 'outside',
+                                        color: '#fff',
+                                        formatter: '{d}%',
+                                        fontSize: remToPx(0.11363636),
+                                    },
+                                },
+                                labelLine: {
+                                    normal: {
+                                        show: false,
+                                        length: remToPx(0.02),
+                                        length2: remToPx(0.02),
+                                    }
+                                },
+                                data: arrs.length > 0 ? arrs : [{name: "一类烟", value: 0},{name: "二类烟", value: 0},{name: "无价烟", value: 0}]
+                            }]
+                        }
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+
+                        //浏览器大小改变时重置大小
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+                    };
+
+                    function loadChartFive(data) {
+                        function remToPx(rem) {
+                            var fontSize = document.documentElement.style.fontSize;
+                            return Math.floor(rem * fontSize.replace('px', ''));
+                        }
+
+                        //获取当前月前5个月
+						var lastSixMonths = [];
+                        var curMonth = new Date().getMonth()+1;
+                        if(curMonth - 5 < 0){
+                            curMonth = 12+curMonth-6;
+						}
+                        for(var i = 0; i < 6; i++){
+                            curMonth = curMonth+1;
+							if(curMonth > 12){
+                                curMonth = curMonth - 12;
+							}
+                            lastSixMonths.push(curMonth+"月");
+						}
+
+                        var worldMapContainer = document.getElementById('chart5');
+
+                        // 基于准备好的dom，初始化echarts实例
+                        var myChart = echarts.init(worldMapContainer, null, {'renderer':'svg'});
+
+                        option = {
+                            tooltip: {
+                                trigger: 'axis',
+                                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                                }
+                            },
+                            legend: {
+                                data: ['计划量', '完成量'],
+                                right: '5%',
+                                top: "5%",
+                                itemWidth: remToPx(0.16608392),
+                                itemHeight: remToPx(0.08741259),
+                                textStyle: {
+                                    color: '#ffffff',
+                                    fontSize: remToPx(0.15734266),
+                                }
+                            },
+                            grid: {
+                                left: '2%',
+                                top: "20%",
+                                bottom: '6%',
+                                containLabel: true
+                            },
+                            calculable: true,
+                            xAxis: [{
+                                type: 'category',
+                                data: lastSixMonths,
+
+                                axisLabel: {
+                                    interval: 0,
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1048951),
+                                    }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                }
+                            }],
+                            yAxis: [{
+                                type: 'value',
+                                splitLine: {
+                                    show: true
+                                },
+                                nameTextStyle: {
+                                    color: ['#ffffff']
+                                },
+                                axisLabel: {
+                                    textStyle: {
+                                        color: '#ffffff',
+                                        fontSize: remToPx(0.1048951),
+                                    }
+                                },
+                                axisLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: '#55bbeb'
+                                    }
+                                }
+                            },],
+
+
+                            series: [
+
+                                {
+                                    name: '计划量',
+                                    type: 'bar',
+                                    barWidth: remToPx(0.05681818),
+                                    data: data.planAmount || [],
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#55bbea'
+                                        }
+                                    }
+                                },
+                                {
+                                    name: '完成量',
+                                    type: 'bar',
+                                    barWidth: remToPx(0.05681818),
+                                    data: data.finishAmount || [],
+                                    itemStyle: {
+                                        normal: {
+                                            color: '#5cb85c'
+                                        }
+                                    },
+
+                                },
+                            ]
+                        }
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+
+                        //浏览器大小改变时重置大小
+                        window.addEventListener("resize", function () {
+                            myChart.resize();
+                        });
+                    };
+
+					//排序符
+                    function genSrlCode(arr){
+                        for(var i = 0 ; i < arr.length; i++){
+                            arr[i].code = i+1;
+                        }
+					}
+
+                    //嵌套websocket结构定义
+                    //生产线
+                    var socketLine = {
+                        url : localPath+'whmes-ws-line',
+                        topic : '/timeByQuery/line',
+                        fn : function(obj){
+                            //加载所有柜子状态
+							if(!isEmptyObject(obj)){
+                                loadCY(obj.leafCabGroupDto);
+							}
+                            if(isEmptyObject(obj) || obj.lineDto.processes.length == 0){
+                                loadLines(test_dt.lineDto.processes);
+                            }else{
+                                loadLines(obj.lineDto.processes);
+                            }
+                        }
+                    }
+                    //成型，发射，装箱
+                    var socketCxfszx = {
+                        url : localPath+'whmes-ws-cxfszx',
+                        topic : '/timeByQuery/cxfszx',
+                        next : socketLine,
+                        fn : function(obj){
+                            if(isEmptyObject(obj) || obj.flBaseGroupDto.flBaseDtos.length == 0){
+                                loadFlBase(test_dt.flBaseGroupDto.flBaseDtos);
+							}else{
+                                loadFlBaseNew(obj.flBaseGroupDto.flBaseDtos);
+                            }
+                        }
+                    }
+                    //机台
+                    var socketMachine = {
+                        url : localPath+'whmes-ws-machine',
+                        topic : '/timeByQuery/machine',
+                        next : socketCxfszx,
+                        fn : function(obj){
+                            if(isEmptyObject(obj) || obj.workCenterGroupDto.length == 0){
+                                loadWorkCenters(test_dt.workCenterGroupDto);
+							}else{
+                                loadWorkCentersNew(obj.workCenterGroupDto);
+							}
+
+                            //添加字体滚动动画
+                            autoScrollNew();
+                        }
+                    };
+                    //Echarts
+                    var socketEcharts = {
+                        url : localPath+'whmes-ws-echarts',
+                        topic : '/timeByQuery/echarts',
+                        next : socketMachine,
+                        fn : function(obj){
+                            if(isEmptyObject(obj)){
+                                return false;
+							}
+                            loadChartOne(obj.planBatchDto == undefined ? test_dt.planBatchDto : obj.planBatchDto);
+                            loadChartTwo(obj.workCenterStatusDto == undefined ? test_dt.workCenterStatusDto : obj.workCenterStatusDto);
+                            loadChartThree(obj.equEfficiencyDto == undefined ? test_dt.equEfficiencyDto : obj.equEfficiencyDto);
+                            loadChartFour(obj.realProductAmountDto == undefined ? test_dt.realProductAmountDto : obj.realProductAmountDto);
+                            loadChartFive(obj.yearPlanDto == undefined ? test_dt.yearPlanDto : obj.yearPlanDto);
+                        }
+                    };
+					//5个库
+                    var socketInv = {
+                        url : localPath+'whmes-ws-inv',
+                        topic : '/timeByQuery/inv',
+                        next : socketEcharts,
+						fn : function(obj){
+                            if(isEmptyObject(obj)){
+                                return false;
+							}
+                            //加载5个库
+                            loadInvs(obj.invDto == undefined ? test_dt.invDto : obj.invDto);
+						}
+					};
+
+                    //开启socket服务
+                    function openSocket(socketObj){
+                        if(socketObj == undefined){
+                            return false;
+                        }
+                        $wfi$.WsdFrameworkInfo.openWebSocket(function (stompClient) {
+                            subId.push(stompClient.subscribe(socketObj.topic, function (viewing) {
+                                var str = viewing.body;
+                                var obj = JSON.parse(str);
+                                socketObj.fn(obj);
+                            }));
+                            connectAfter(stompClient,socketObj.topic);
+                            openSocket(socketObj.next);
+						},socketObj.url);
+					}
+
+					//开启websocket
+                    openSocket(socketInv);
+
+                    $wfi$.WsdFrameworkInfo.Init();
+                }
+
+                //向服务端请求初始化缓存数据
+                function connectAfter(stopm,json){
+                    stopm.send("/whmesWebSocket/sendSocket/initScreen",null,json);
+				}
+
+                //判断是否是空对象
+                function isEmptyObject(obj){
+				    for(var key in obj){
+				        return false;
+                    }
+                    return true;
+                }
+			</script>
+	</body>
+</html>
