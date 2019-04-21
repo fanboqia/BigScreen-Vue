@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>大屏</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript">
+			var html = document.querySelector('html');
+			var width = html.clientWidth;
+			html.style.fontSize = width / 30 + "px";
+		</script>
+		<link rel="stylesheet" type="text/css" href="css/newStyle.css" />
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+		<script src="js/test_db.js"></script>
+	</head>	
+	<body>
+		<!--动态添加2x2表格-->
+		<div id="app">
+			<table v-for="table in tables">
+			    <tr v-for="row in table.row">
+			        <td style="width:80px;float:left" v-for="item in row">
+			            <input type="text" v-model="item.val" style="width:40px">
+			            <div style="width:40px;float:left">{{item.val}}</div>
+			        </td>
+			   </tr>
+			</table>
+			<button v-on:click="add">添加2x2的表格</button>
+		</div>
+
+		<div id="wcLastRow">
+			<ul>
+				<li v-for="(tab,index) in workCenterGroupDto" :id="tab.name" class="item" @click="loadLastRowWorkCenter"><span v-if="tab.val > 0">{{ tab.val }}</span></li>
+			</ul>
+		</div>
+		<h4>响应测试</h4>
+		<ul id="test">
+			<li @click="testClick">{{ test }}</li>
+		</ul>
+		<script type="text/javascript">
+			var vm = new Vue({
+				el: '#wcLastRow',
+				data : function(){
+					return {
+						workCenterGroupDto : [{name:'first',val:100},{name:'second',val:200}]
+					};
+				},
+				methods: {
+					loadLastRowWorkCenter : function(){
+						this.workCenterGroupDto[0]['val'] = 100;
+					}
+				}
+			});
+
+			var vm2 = new Vue({
+				el: '#test',
+				data : function(){
+					var private = 1;
+					return {
+						test: 123 + private	
+					};
+				},
+				methods: {
+					testClick : function(){
+						this.test = 22222;
+					}
+				}
+			});
+		</script>
+		<script type="text/javascript">
+		      var vm3 = new Vue({
+		      el : "#app",
+		      data:{
+		        tables : []
+		      },
+		      methods:{
+		            add:function(){
+			            row = [];
+			            rmax = 2;
+			            cmax = 2;
+			             for( i = 0; i < rmax; i++){
+			                column = [];
+			                for( f = 0; f < cmax; f++){
+			                    column = column.concat({
+			                            val:"",
+			                    });
+			                }
+			                row.push(column);
+			            }
+			             this.tables.push({
+			                row:row,
+			            });
+		        }
+		    }
+		     });
+		</script>
+</html>

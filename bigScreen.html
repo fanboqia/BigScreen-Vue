@@ -1,0 +1,1703 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>大屏</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript">
+			var html = document.querySelector('html');
+			var width = html.clientWidth;
+			html.style.fontSize = width / 30 + "px";
+		</script>
+		<link rel="stylesheet" type="text/css" href="css/newStyle.css" />
+		<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+		<script src="js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/vue.min.js"></script>
+		<script src="js/test_db.js"></script>
+	</head>
+	<body>
+		<h4 class="screenTitle" style="width: 100%;height: 0.6rem;line-height: 0.6rem;font-size: 0.4rem;text-align: center;position: absolute;left: 0;top: 0;background: url(img/header.png) 0 0 no-repeat;background-size: 100% 100%;"></h4>
+		<div class="BigScreen">
+			<div class="BigScreen-left fl">
+				<div class="borderBox Stock fr">
+					<span class="horn1"></span>
+					<span class="horn2"></span>
+					<span class="horn3"></span>
+					<span class="horn4"></span>
+					<div class="StockItem">
+						<h4 class="title">辅料库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico1.png" class="img1">
+								<p>占用比 <span>61%</span></p>
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data">6345124</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data">5124</h4>
+								<p class="name">总容量</p>
+								<h4 class="data">9124</h4>
+							</div>
+						</div>
+					</div>
+					<div class="StockItem">
+						<h4 class="title">丝箱库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico2.png" class="img2">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data">6345124</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data">5124</h4>
+								<p class="name">占用比</p>
+								<h4 class="data">61%</h4>
+							</div>
+						</div>
+					</div>
+					<div class="StockItem">
+						<h4 class="title">成品库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico3.png" class="img3">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data">6345124</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data">5124</h4>
+								<p class="name">占用比</p>
+								<h4 class="data">61%</h4>
+							</div>
+						</div>
+					</div>
+					<div class="StockItem">
+						<h4 class="title">滤棒库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico4.png" class="img4">
+								<p style="margin-top: 0.11363636rem;">占用比 <span>61%</span></p>
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data">6345124</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data">5124</h4>
+								<p class="name">总容量</p>
+								<h4 class="data">9124</h4>
+							</div>
+						</div>
+					</div>
+					<div class="StockItem">
+						<h4 class="title">配方库</h4>
+						<div class="clearfix">
+							<div class="leftDiv fl">
+								<img src="img/Stock-ico5.png" class="img5">
+							</div>
+							<div class="rightDiv fr">
+								<p class="name">总公斤数</p>
+								<h4 class="data">6345124</h4>
+								<p class="name">总箱数</p>
+								<h4 class="data">5124</h4>
+								<p class="name">占用比</p>
+								<h4 class="data">61%</h4>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="Production-line fr">
+					<div class="stem-silk silk1">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai judge"></span>
+							一级储梗
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div class="stem-silk silk2">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai judge"></span>
+							二级储梗
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div class="stem-silk silk3">
+						<h4 class="title" style="text-indent: 0;">
+							<span class="tai judge"></span>
+							储梗丝柜
+						</h4>
+						<p>牌 号：专用梗丝</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div class="stem-silk silk4">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div class="stem-silk silk5">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01050 </p>
+					</div>
+					<div class="stem-silk silk6">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01051 </p>
+					</div>
+					<div class="stem-silk silk7">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01051 </p>
+					</div>
+					<div class="stem-silk silk8">
+						<h4 class="title">
+							<span class="tai"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01052 </p>
+					</div>
+					<div class="stem-silk silk9">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切片
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div class="stem-silk silk10">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div class="stem-silk silk11">
+						<h4 class="title">
+							<span class="tai"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01053 </p>
+					</div>
+					<div class="stem-silk silk12">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							润叶
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk13">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							加料
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk14">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk15">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							润叶
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk16">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							加料
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk17">
+						<h4 class="title">
+							<span class="tai judge"></span>
+							切丝
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="stem-silk silk18">
+						<h4 class="title">
+							<span class="tai"></span>
+							加香
+						</h4>
+						<p>牌 号：01103 黄鹤楼（软蓝）</p>
+						<p>批次号：01054 </p>
+					</div>
+					<div class="Cabinet-10">
+						<div class="CabinetItem white">1</div>
+						<div class="CabinetItem">2</div>
+						<div class="CabinetItem">3</div>
+						<div class="CabinetItem white">4</div>
+						<div class="CabinetItem">5</div>
+						<div class="CabinetItem red">6</div>
+						<div class="CabinetItem white">7</div>
+						<div class="CabinetItem">8</div>
+						<div class="CabinetItem">9</div>
+						<div class="CabinetItem">10</div>
+					</div>
+					<div class="random-two"></div>
+					<div class="random-tjree"></div>
+					<div class="random-four"></div>
+					<div class="change location-one"></div>
+					<div class="change location-two"></div>
+					<div class="change location-three"></div>
+					<div class="change location-four"></div>
+					<div class="change location-five"></div>
+					<div class="image1">
+						<img src="img/backage-one.gif" alt="" class="backage-one response"/>
+						<div class="response">
+							<img src="img/img1-2.png" alt="" class="img1-2"/>
+							<img src="img/img1-3.png" alt="" class="img1-3"/>
+						</div>
+						<div class="response">
+							<img src="img/img1-4.png" alt="" class="img1-4"/>
+							<img src="img/img1-5.png" alt="" class="img1-5"/>
+						</div>
+					</div>
+					<div class="image2">
+						<img src="img/backage-two.gif" alt="" class="backage-two response"/>
+						<img src="img/img2-2.png" alt="" class="img2-2 response"/>
+						<img src="img/img2-3.png" alt="" class="img2-3"/>
+						<img src="img/img2-4.png" alt="" class="img2-4"/>
+						<img src="img/img2-5.png" alt="" class="img2-5"/>
+					</div>
+					<div class="image3">
+						<img src="img/backage-two.gif" alt="" class="backage-three response"/>
+						<div class="response">
+							<img src="img/img2-2.png" alt="" class="img2-2"/>
+							<img src="img/img2-3.png" alt="" class="img2-3"/>
+						</div>
+						<img src="img/img2-4.png" alt="" class="img2-4"/>
+						<img src="img/img2-5.png" alt="" class="img2-5"/>
+					</div>
+					<div class="image4">
+						<img src="img/backage-two.gif" alt="" class="backage-four response"/>
+						<img src="img/img2-2.png" alt="" class="img2-2 response"/>
+						<img src="img/img2-3.png" alt="" class="img2-3"/>
+						<img src="img/img2-4.png" alt="" class="img2-4"/>
+						<img src="img/img2-5.png" alt="" class="img2-5"/>
+					</div>
+					<div class="image5">
+						<img src="img/backage-two.gif" alt="" class="backage-five response"/>
+						<div class="response">
+							<img src="img/img5-2.png" alt="" class="img5-2"/>
+							<img src="img/img5-3.png" alt="" class="img5-3"/>
+						</div>
+						<div class="response">
+							<img src="img/img5-4.png" alt="" class="img5-4"/>
+							<img src="img/img5-5.png" alt="" class="img5-5"/>
+						</div>
+						<img src="img/img5-6.png" alt="" class="img5-6"/>
+					</div>
+					<div class="image6">
+						<img src="img/backage-two.gif" alt="" class="backage-six response"/>
+						<div class="response">
+							<img src="img/img5-2.png" alt="" class="img5-2"/>
+							<img src="img/img5-3.png" alt="" class="img5-3"/>
+						</div>
+						<div class="response">
+							<img src="img/img5-4.png" alt="" class="img5-4"/>
+							<img src="img/img5-5.png" alt="" class="img5-5"/>
+						</div>
+						<img src="img/img6-6.png" alt="" class="img6-6"/>
+					</div>
+					<div class="signal-one">
+						<span class="signal signal-first signal-green"></span>
+						<span class="signal signal-second signal-green"></span>
+						<span class="signal signal-third signal-white"></span>
+						<span class="signal signal-fourth signal-green"></span>
+					</div>
+					<div class="signal-two">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+						<span class="signal signal-third signal-green"></span>
+						<span class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-three">
+						<span cid="CY2605" class="signal signal-first signal-white"></span>
+						<span cid="CY2605" class="signal signal-second signal-green"></span>
+						<span class="signal signal-third signal-green"></span>
+						<span class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-four">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+					</div>
+					<div class="signal-five">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+						<span class="signal signal-third signal-green"></span>
+						<span class="signal signal-fourth signal-white"></span>
+					</div>
+					<div class="signal-six">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+					</div>
+					<div class="signal-seven">
+						<span class="signal signal-first signal-green"></span>
+						<span class="signal signal-second signal-white"></span>
+						<span class="signal signal-third signal-white"></span>
+						<span class="signal signal-fourth signal-green"></span>
+					</div>
+					<div class="signal-eight">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+					</div>
+					<div class="signal-nine">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+					</div>
+					<div class="signal-ten">
+						<span class="signal signal-first signal-green"></span>
+						<span class="signal signal-second signal-white"></span>
+						<span class="signal signal-third signal-white"></span>
+						<span class="signal signal-fourth signal-green"></span>
+						<span class="signal signal-fifth signal-white"></span>
+						<span class="signal signal-sixth signal-green"></span>
+					</div>
+					<div class="signal-eleven">
+						<span class="signal signal-first signal-white"></span>
+						<span class="signal signal-second signal-green"></span>
+					</div>
+					<div class="signal-twelve">
+						<span class="signal signal-first signal-green"></span>
+						<span class="signal signal-second signal-white"></span>
+						<span class="signal signal-third signal-white"></span>
+						<span class="signal signal-fourth signal-green"></span>
+					</div>
+					<div class="signal-thirteen">
+						<span class="signal signal-first signal-green"></span>
+						<span class="signal signal-second signal-white"></span>
+						<span class="signal signal-third signal-white"></span>
+						<span class="signal signal-fourth signal-green"></span>
+						<span class="signal signal-fifth signal-white"></span>
+						<span class="signal signal-sixth signal-green"></span>
+					</div>
+					<div class="Cabinet-13">
+						<div class="CabinetItem white">11</div>
+						<div class="CabinetItem">12</div>
+						<div class="CabinetItem">13</div>
+					</div>
+					<div class="Cabinet-16">
+						<div class="CabinetItem white">14</div>
+						<div class="CabinetItem">15</div>
+						<div class="CabinetItem red">16</div>
+					</div>
+					<div class="Cabinet-27">
+						<div class="CabinetItem white">25</div>
+						<div class="CabinetItem">26</div>
+						<div class="CabinetItem">27</div>
+					</div>
+					<div class="Cabinet-18">
+						<div class="line">
+							<div class="CabinetItem red">1</div>
+							<div class="CabinetItem red">2</div>
+							<div class="CabinetItem">3</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem red">4</div>
+							<div class="CabinetItem">5</div>
+							<div class="CabinetItem red">6</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem">7</div>
+							<div class="CabinetItem white">8</div>
+							<div class="CabinetItem">9</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem red">10</div>
+							<div class="CabinetItem">11</div>
+							<div class="CabinetItem">12</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem">13</div>
+							<div class="CabinetItem white">14</div>
+							<div class="CabinetItem white">15</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem">16</div>
+							<div class="CabinetItem">17</div>
+							<div class="CabinetItem">18</div>
+						</div>
+					</div>
+					<div class="Cabinet-24">
+						<div class="line">
+							<div class="CabinetItem white">20</div>
+							<div class="CabinetItem">21</div>
+							<div class="CabinetItem">22</div>
+						</div>
+						<div class="line">
+							<div class="CabinetItem">23</div>
+							<div class="CabinetItem">24</div>
+							<div class="CabinetItem">25</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="BigScreen-center borderBox fl">
+				<span class="horn1"></span>
+				<span class="horn2"></span>
+				<span class="horn3"></span>
+				<span class="horn4"></span>
+				<div class="chartwarp chart1">
+					<h4>当日计划生产批次信息</h4>
+					<div id="chart1" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart2">
+					<h4>工作台班数 <span>本月计划工作台班数356</span></h4>
+					<div id="chart2" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart3">
+					<h4>设备效率</h4>
+					<div id="chart3" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart4">
+					<h4>实际产量</h4>
+					<div id="chart4" style="width: 100%;height: 100%;"></div>
+				</div>
+				<div class="chartwarp chart5">
+					<h4>当年计划完成情况一览</h4>
+					<div id="chart5" style="width: 100%;height: 100%;"></div>
+				</div>
+			</div>
+			<div class="BigScreen-right fl">
+				<div class="Machine-top">
+					<ul class="listWarp1">
+						<li>
+							<span>1</span>
+						</li>
+						<li class="green">
+							<span>2</span>
+						</li>
+						<li>
+							<span>3</span>
+						</li>
+						<li class="green">
+							<span>4</span>
+						</li>
+						<li class="green">
+							<span>5</span>
+						</li>
+						<li class="green">
+							<span>6</span>
+						</li>
+						<li class="green">
+							<span>7</span>
+						</li>
+						<li class="green">
+							<span>8</span>
+						</li>
+						<li class="green">
+							<span>9</span>
+						</li>
+						<li class="green">
+							<span>10</span>
+						</li>
+						<li class="green">
+							<span>11</span>
+						</li>
+						<li class="green">
+							<span>12</span>
+						</li>
+						<li class="red">
+							<span>13</span>
+						</li>
+						<li class="green">
+							<span>14</span>
+						</li>
+						<li class="red">
+							<span>15</span>
+						</li>
+					</ul>
+					<ul class="listWarp1 listWarp2">
+						<li>
+							<span>1</span>
+						</li>
+						<li class="green">
+							<span>2</span>
+						</li>
+						<li>
+							<span>3</span>
+						</li>
+						<li class="green">
+							<span>4</span>
+						</li>
+						<li class="green">
+							<span>5</span>
+						</li>
+						<li class="green">
+							<span>6</span>
+						</li>
+						<li class="green">
+							<span>7</span>
+						</li>
+						<li class="green">
+							<span>8</span>
+						</li>
+						<li class="green">
+							<span>9</span>
+						</li>
+						<li class="green">
+							<span>10</span>
+						</li>
+						<li class="green">
+							<span>11</span>
+						</li>
+						<li class="green">
+							<span>12</span>
+						</li>
+						<li class="red">
+							<span>13</span>
+						</li>
+					</ul>
+					<ul class="listWarp3">
+						<li>
+							<span>1</span>
+						</li>
+						<li class="green">
+							<span>2</span>
+						</li>
+						<li>
+							<span>3</span>
+						</li>
+						<li class="green">
+							<span>4</span>
+						</li>
+						<li class="green">
+							<span>5</span>
+						</li>
+						<li class="green">
+							<span>6</span>
+						</li>
+						<li class="green">
+							<span>7</span>
+						</li>
+						<li class="green">
+							<span>8</span>
+						</li>
+						<li class="green">
+							<span>9</span>
+						</li>
+						<li class="green">
+							<span>10</span>
+						</li>
+						<li class="green">
+							<span>11</span>
+						</li>
+						<li class="green">
+							<span>12</span>
+						</li>
+						<li class="red">
+							<span>13</span>
+						</li>
+						<li class="green">
+							<span>14</span>
+						</li>
+						<li class="red">
+							<span>15</span>
+						</li>
+						<li class="green">
+							<span>16</span>
+						</li>
+						<li class="green">
+							<span>17</span>
+						</li>
+						<li class="red">
+							<span>18</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="Machine-bottom">
+					<div class="MachineList fl">
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">
+								<p class="warp"><span class="animate">81299黄鹤楼（硬红）GN112312312</span></p>
+							</h4>
+							<h4 class="name2">
+								<p class="warp">
+									<p class="animate">81299黄鹤楼（硬红）GN1</p>
+								</p>
+							</h4>
+							<div class="line red"></div>
+							<div class="code">101R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">102R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">103R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">104R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">105R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">106R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">107R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">108R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">109R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">110R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">111R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">112R</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">113R</div>
+						</div>
+					</div>
+
+					<div class="MachineList MachineList8 fl">
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">201Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">202Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">203Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">204Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">205Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">206Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">207Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">208Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">209Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line red"></div>
+							<div class="code">210Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">211Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">212Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">213Y</div>
+						</div>
+					</div>
+
+					<div class="MachineList MachineList2 fl">
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">301Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">302Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">303Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line red"></div>
+							<div class="code">304Y</div>
+						</div>
+
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">305Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">306Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">307Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">308Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left green fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">309Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right green fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">310Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left  fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right  fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">311Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left red fl"></div>
+								<span class="left-num">40箱</span>
+								<div class="img-right red fl"></div>
+								<span class="right-num">84箱</span>
+							</div>
+							<h4 class="name">81299黄鹤楼（硬红）GN1</h4>
+							<div class="line"></div>
+							<div class="code">312Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left  fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right  fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">313Y</div>
+						</div>
+						<div class="item">
+							<div class="imgCon clearfix">
+								<div class="img-left  fl"></div>
+								<span class="left-num"></span>
+								<div class="img-right  fl"></div>
+								<span class="right-num"></span>
+							</div>
+							<h4 class="name"></h4>
+							<div class="line"></div>
+							<div class="code">314Y</div>
+						</div>
+					</div>
+
+					<!--VUE模板-->
+					<div id="wcLastRow" class="MachineList MachineList3 fl">
+						<div v-for="tab in workCenterGroupDto" :id="tab.id" class="item">
+							<div class="imgCon clearfix">
+								<div :class="'img-left '+statusCodeToColor(tab.jjDto.status)+' fl'"></div>
+								<span class="left-num" v-show="showBoxNum(tab.jjDto.status)">{{ tab.jjDto.boxNum }}</span>
+								<div :class="'img-right '+statusCodeToColor(tab.bzDto.status)+' fl'"></div>
+								<span class="right-num" v-show="showBoxNum(tab.bzDto.status)">{{ tab.bzDto.boxNum }}</span>
+							</div>
+							<h4 class="name">{{ tab.jjDto.matName }}</h4>
+							<div :class="'line '+lineToColor(tab.bzDto.status)"></div>
+							<div class="code">{{ tab.name }}</div>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				autoScroll(".name");
+				autoScroll(".name2");
+				function autoScroll(el) {
+					$(el).each(function(i) {
+						var _this = $(this);
+						if (_this.find(".animate").width() > _this.width()) {
+							var warp = _this.find(".warp");
+							var scrollItem = warp.find(".animate").innerWidth();
+							var clone = warp.find(".animate").clone();
+							warp.append(clone);
+							warp.width(scrollItem * warp.find(".animate").length);
+							var myscroll = setInterval(function() {
+								scrollAnimate()
+							}, 50)
+							var left = _this.scrollLeft();
+
+							function scrollAnimate() {
+								if (_this.scrollLeft() >= scrollItem) {
+									left = 0;
+									_this.scrollLeft(0)
+								} else {
+									_this.scrollLeft(left++);
+								}
+							}
+
+							//鼠标移入清除滚动
+							_this.mouseover(function() {
+								clearInterval(myscroll)
+							})
+							//鼠标移出滚动继续
+							_this.mouseout(function() {
+								myscroll = setInterval(function() {
+									scrollAnimate()
+								}, 50)
+							})
+						}
+					});
+				}
+			</script>
+
+			<script type="text/javascript">
+				$(function(){
+					$(".judge").each(function(){		
+						var index = $(".judge").index(this);
+						if($(this).hasClass("abnormal")){
+							$(".response").eq(index).hide();
+						}else {
+							$(".response").eq(index).show();
+						}
+					});
+				});
+				(function() {
+					function remToPx(rem) {
+						var fontSize = document.documentElement.style.fontSize;
+						return Math.floor(rem * fontSize.replace('px', ''));
+					}
+					var worldMapContainer = document.getElementById('chart1');
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(worldMapContainer);
+
+					option = {
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: { // 坐标轴指示器，坐标轴触发有效
+								type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						legend: {
+							data: ['已完成', '未完成'],
+							right: '5%',
+							top: "5%",
+							itemWidth: remToPx(0.16608392),
+							itemHeight: remToPx(0.08741259),
+							textStyle: {
+								color: '#ffffff',
+								fontSize: remToPx(0.15734266)
+							}
+						},
+						color: ['#51d951', '#54bbe8'],
+						grid: {
+							left: '2%',
+							top: "20%",
+							bottom: '5%',
+							containLabel: true
+						},
+						xAxis: {
+							type: 'value',
+							axisLabel: {
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1486014)
+								}
+							},
+							axisLine: {
+								show: false,
+								lineStyle: {
+									color: '#eeeeee'
+								}
+							},
+						},
+						yAxis: {
+							type: 'category',
+							data: ['5号线', '4号线', '3号线', '2号线', '1号线'],
+							axisLabel: {
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1486014)
+								}
+							},
+							axisLine: {
+								lineStyle: {
+									color: '#eeeeee'
+								}
+							},
+							axisTick: {
+								show: false
+							}
+						},
+						series: [{
+								name: '已完成',
+								type: 'bar',
+								stack: '总量',
+								barWidth: remToPx(0.16608392),
+								label: {
+									normal: {
+										show: true,
+										position: 'insideRight',
+										fontSize: remToPx(0.11363636)
+									}
+								},
+								data: [320, 302, 301, 334, 390]
+							},
+							{
+								name: '未完成',
+								type: 'bar',
+								stack: '总量',
+								barWidth: remToPx(0.16608392),
+								label: {
+									normal: {
+										show: true,
+										position: 'insideRight',
+										fontSize: remToPx(0.11363636)
+									}
+								},
+								data: [120, 132, 101, 134, 90]
+							},
+
+						]
+
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+
+					//浏览器大小改变时重置大小
+					window.addEventListener("resize", function() {
+						myChart.resize();
+					});
+				})();
+				(function() {
+					function remToPx(rem) {
+						var fontSize = document.documentElement.style.fontSize;
+						return Math.floor(rem * fontSize.replace('px', ''));
+					}
+					var worldMapContainer = document.getElementById('chart2');
+					// 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(worldMapContainer);
+
+					option = {
+						tooltip: {
+							trigger: 'item',
+							formatter: "{a} <br/>{b}: {c} ({d}%)"
+						},
+						color: ['#51d951', '#f74747', '#9da2a2'],
+						legend: {
+							orient: 'vertical',
+							right: '10%',
+							top: "35%",
+							itemWidth: remToPx(0.16608392),
+							itemHeight: remToPx(0.08741259),
+							itemGap: remToPx(0.26223776),
+							textStyle: {
+								color: '#ffffff',
+								fontSize: remToPx(0.15734266),
+							},
+							data: ['实际已发生', '剩余计划', '空闲机台'],
+
+						},
+						series: [{
+							type: 'pie',
+							radius: ['40%', '60%'],
+							center: ['30%', '60%'],
+							avoidLabelOverlap: false,
+							label: {
+								normal: {
+									show: true,
+									position: 'outside',
+									color: '#fff',
+									formatter: '{d}%',
+									fontSize: remToPx(0.11363636),
+								},
+							},
+							labelLine: {
+								normal: {
+									show: false,
+									length: remToPx(0.02),
+									length2: remToPx(0.02),
+								}
+							},
+							data: [{
+									value: 335,
+									name: '实际已发生',
+								},
+								{
+									value: 310,
+									name: '剩余计划',
+								},
+								{
+									value: 234,
+									name: '空闲机台',
+								}
+							]
+						}]
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+
+					//浏览器大小改变时重置大小
+					window.addEventListener("resize", function() {
+						myChart.resize();
+					});
+				})();
+				(function() {
+					function remToPx(rem) {
+						var fontSize = document.documentElement.style.fontSize;
+						return Math.floor(rem * fontSize.replace('px', ''));
+					}
+					var worldMapContainer = document.getElementById('chart3');
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(worldMapContainer);
+
+					option = {
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: { // 坐标轴指示器，坐标轴触发有效
+								type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						legend: {
+							data: ['去年', '今年'],
+							right: '5%',
+							top: "5%",
+							itemWidth: remToPx(0.16608392),
+							itemHeight: remToPx(0.08741259),
+							textStyle: {
+								color: '#ffffff',
+								fontSize: remToPx(0.15734266),
+							}
+						},
+						grid: {
+							left: '2%',
+							top: "20%",
+							bottom: '6%',
+							containLabel: true
+						},
+						calculable: true,
+						xAxis: [{
+							type: 'category',
+							data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+
+							axisLabel: {
+								interval: 0,
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1048951),
+								}
+							},
+							axisLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							}
+						}],
+						yAxis: [{
+							type: 'value',
+							max: 100,
+							splitLine: {
+								show: true
+							},
+							nameTextStyle: {
+								color: ['#ffffff']
+							},
+							axisLabel: {
+								formatter: '{value}%',
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1048951),
+								}
+							},
+							axisLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							},
+							splitLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							}
+						}, ],
+
+
+						series: [
+
+							{
+								name: '去年',
+								type: 'bar',
+								barWidth: remToPx(0.05681818),
+								data: [52, 73, 83, 77, 76, 63, 85, 58, 59, 78, 77, 90],
+								itemStyle: {
+									normal: {
+										color: '#55bbea'
+									}
+								}
+							},
+							{
+								name: '今年',
+								type: 'bar',
+								barWidth: remToPx(0.05681818),
+								data: [60, 88, 79, 72, 80, 78, 78, 69, 82, 90, 89, 98],
+								itemStyle: {
+									normal: {
+										color: '#5cb85c'
+									}
+								}
+							},
+						]
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+
+					//浏览器大小改变时重置大小
+					window.addEventListener("resize", function() {
+						myChart.resize();
+					});
+				})();
+				(function() {
+					function remToPx(rem) {
+						var fontSize = document.documentElement.style.fontSize;
+						return Math.floor(rem * fontSize.replace('px', ''));
+					}
+					var worldMapContainer = document.getElementById('chart4');
+					// 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(worldMapContainer);
+
+					option = {
+						tooltip: {
+							trigger: 'item',
+							formatter: "{a} <br/>{b}: {c} ({d}%)"
+						},
+						color: ['#53b1e5', '#e44952', '#4fcc5b', '#d6c131'],
+						legend: {
+							orient: 'vertical',
+							right: '10%',
+							top: "28%",
+							itemWidth: remToPx(0.16608392),
+							itemHeight: remToPx(0.08741259),
+							itemGap: remToPx(0.26223776),
+							textStyle: {
+								color: '#ffffff',
+								fontSize: remToPx(0.15734266),
+							},
+							data: ['一类烟', '二类烟', '三类烟', '经典品牌'],
+
+						},
+						series: [{
+							type: 'pie',
+							radius: '60%',
+							center: ['35%', '60%'],
+							avoidLabelOverlap: false,
+							label: {
+								normal: {
+									show: true,
+									position: 'outside',
+									color: '#fff',
+									formatter: '{d}%',
+									fontSize: remToPx(0.11363636),
+								},
+							},
+							labelLine: {
+								normal: {
+									show: false,
+									length: remToPx(0.02),
+									length2: remToPx(0.02),
+								}
+							},
+							data: [{
+									value: 61,
+									name: '一类烟',
+								},
+								{
+									value: 14,
+									name: '二类烟',
+								},
+								{
+									value: 4,
+									name: '三类烟',
+								},
+								{
+									value: 25,
+									name: '经典品牌',
+								}
+							]
+						}]
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+
+					//浏览器大小改变时重置大小
+					window.addEventListener("resize", function() {
+						myChart.resize();
+					});
+				})();
+				(function() {
+					function remToPx(rem) {
+						var fontSize = document.documentElement.style.fontSize;
+						return Math.floor(rem * fontSize.replace('px', ''));
+					}
+					var worldMapContainer = document.getElementById('chart5');
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart = echarts.init(worldMapContainer);
+
+					option = {
+						tooltip: {
+							trigger: 'axis',
+							axisPointer: { // 坐标轴指示器，坐标轴触发有效
+								type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+							}
+						},
+						legend: {
+							data: ['计划量', '完成量'],
+							right: '5%',
+							top: "5%",
+							itemWidth: remToPx(0.16608392),
+							itemHeight: remToPx(0.08741259),
+							textStyle: {
+								color: '#ffffff',
+								fontSize: remToPx(0.15734266),
+							}
+						},
+						grid: {
+							left: '2%',
+							top: "20%",
+							bottom: '6%',
+							containLabel: true
+						},
+						calculable: true,
+						xAxis: [{
+							type: 'category',
+							data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+
+							axisLabel: {
+								interval: 0,
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1048951),
+								}
+							},
+							axisLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							}
+						}],
+						yAxis: [{
+							type: 'value',
+							splitLine: {
+								show: true
+							},
+							nameTextStyle: {
+								color: ['#ffffff']
+							},
+							axisLabel: {
+								textStyle: {
+									color: '#ffffff',
+									fontSize: remToPx(0.1048951),
+								}
+							},
+							axisLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							},
+							splitLine: {
+								lineStyle: {
+									color: '#55bbeb'
+								}
+							}
+						}, ],
+
+
+						series: [
+
+							{
+								name: '计划量',
+								type: 'bar',
+								barWidth: remToPx(0.05681818),
+								data: [520, 730, 830, 770, 760, 630, 850, 580, 590, 780, 770, 900],
+								itemStyle: {
+									normal: {
+										color: '#55bbea'
+									}
+								}
+							},
+							{
+								name: '完成量',
+								type: 'bar',
+								barWidth: remToPx(0.05681818),
+								data: [600, 880, 790, 720, 800, 780, 780, 690, 820, 900, 890, 980],
+								itemStyle: {
+									normal: {
+										color: '#5cb85c'
+									}
+								},
+
+							},
+						]
+					}
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
+
+					//浏览器大小改变时重置大小
+					window.addEventListener("resize", function() {
+						myChart.resize();
+					});
+				})();
+			</script>
+			<script type="text/javascript">
+				var $workCenters$ = new Vue({
+					el: '#wcLastRow',
+					data : function(){
+						//机台颜色
+						var workCenterColorMap = {};
+			            workCenterColorMap['1'] = "green";
+			            workCenterColorMap['2'] = "red";
+			            workCenterColorMap['3'] = "";
+			            workCenterColorMap['4'] = ""; 
+			            //包装线颜色
+			            var lineColorMap = {};
+			            lineColorMap['1'] = "";
+			            lineColorMap['2'] = "red";
+			            lineColorMap['3'] = "red";
+						return {
+							workCenterGroupDto : [],
+							workCenterColorMap,
+							lineColorMap
+						}
+					},
+					created : function(){
+						this.workCenterGroupDto = test_dt.workCenterGroupDto.slice(13 + 13 + 14, 13 + 13 + 14 + 4);
+					},
+					methods: {
+						statusCodeToColor : function(status){
+							return this.workCenterColorMap[status];
+						},
+						lineToColor : function(status){
+							return this.lineColorMap[status];
+						},
+						showBoxNum : function(status){
+							return this.statusCodeToColor(status) == 'green';
+						}
+					},
+					computed : {
+						
+					}
+				});
+			</script>
+			<script type="text/javascript">
+				//通过websocket获取结果
+				$workCenters$.$data.workCenterGroupDto[3].jjDto.matName = "222sss2222";
+			</script>
+	</body>
+</html>
